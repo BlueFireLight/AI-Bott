@@ -66,41 +66,60 @@ def get_gemini_response(message_input,elements_number):
                            
 
     if(elements_number>=max_question):
+
         if(message_input=="result"):
+
             feedback=""
             for i in range(1,int(max_question/2)):
+
                 question_eval=data[2*i+1]['parts'][0]
                 answer_eval=data[2*i+2]['parts'][0]
+
                 prompt=" Evaluate the following answer and provide short, constructive feedback in 3-4 lines. Provide helpful suggestions for improvement. The answer is: " +answer_eval+ ". for the question: "+ question_eval
                 response = model.generate_content(prompt)
-                feedback=feedback+ "The feedback for Question "+ str(i) +" is " + response.text    
-            return(feedback)    
-        else:    
+
+                feedback=feedback+ "The feedback for Question "+ str(i) +" is " + response.text 
+
+            return(feedback)  
+          
+        else:
+
             return("Interview over, say result to get the result of the interview")
     
     if(topic=="computer networks" or topic=="computer network"):
+
         try:
             with open("compnetwork_ques.json") as user_file:
                 questions = json.load(user_file)
+
             random_number = random.randint(0, 96)
-            prompt= "You are an interviewer, ask the question to the user as in real interview : " + questions[random_number] +" This will be the question number "+str(int(elements_number/2))+" of the interview."
+
+            prompt= "You are an interviewer, ask the question to the user as in real interview : " + questions[random_number] +" This will be the question number "+str(int(elements_number/2))+" of the interview. " + "Do not say ask clarifying questions"
             response = model.generate_content(prompt)
+
             return(response.text)            
         
         except Exception as e:
+
             print(e)
             return
 
 
     if(topic=="machine learning"):
+
         try:
-            with open("ML_ques.json",encoding='utf-8') as f4:
+            with open("ml_questions.json",encoding='utf-8') as f4:
                 questions1=json.load(f4)
+
             random_number1=random.randint(0,99)
+
             prompt="You are an interviewer, ask the question to the user as in real interview : " + questions1[random_number1] +" This will be the question number "+str(int(elements_number/2))+" of the interview."   
             response = model.generate_content(prompt)
+
             return(response.text)
+        
         except Exception as e:
+
             print(e)
             return
 
